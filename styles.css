@@ -61,3 +61,8 @@ p {
 button {
   margin: 20px;
 }
+
+.image {
+  background-size: cover;
+  background-position: center;
+}
