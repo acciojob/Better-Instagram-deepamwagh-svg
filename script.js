@@ -1,27 +1,33 @@
 //your code here
-let draggedDiv = null;
+let dragSource = null;
 
-document.querySelectorAll(".image").forEach(div => {
-  div.addEventListener("dragstart", function () {
-    draggedDiv = this;
-    this.classList.add("selected");
-  });
+      const boxes = document.querySelectorAll(".image");
 
-  div.addEventListener("dragover", function (e) {
-    e.preventDefault(); // required to allow drop
-  });
+      boxes.forEach(box => {
+        box.addEventListener("dragstart", e => {
+          dragSource = e.target;
+          e.target.classList.add("selected");
+          e.dataTransfer.effectAllowed = "move";
+        });
 
-  div.addEventListener("drop", function () {
-    if (draggedDiv === this) return;
+        box.addEventListener("dragend", e => {
+          e.target.classList.remove("selected");
+        });
 
-    let temp = this.style.backgroundImage;
-    this.style.backgroundImage = draggedDiv.style.backgroundImage;
-    draggedDiv.style.backgroundImage = temp;
+        box.addEventListener("dragover", e => {
+          e.preventDefault();
+        });
 
-    draggedDiv.classList.remove("selected");
-  });
+        box.addEventListener("drop", e => {
+          e.preventDefault();
+          if (dragSource === e.target) return;
 
-  div.addEventListener("dragend", function () {
-    this.classList.remove("selected");
-  });
-});
+          const tempBg = dragSource.style.backgroundImage;
+          dragSource.style.backgroundImage = e.target.style.backgroundImage;
+          e.target.style.backgroundImage = tempBg;
+
+          const tempText = dragSource.innerText;
+          dragSource.innerText = e.target.innerText;
+          e.target.innerText = tempText;
+        });
+      });
